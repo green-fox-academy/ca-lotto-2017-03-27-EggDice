@@ -2,9 +2,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Lotto {
   final public static String CSV_PATH = "assets/otos.csv";
@@ -14,10 +12,35 @@ public class Lotto {
 
   public static void main(String[] args) {
     List<String> allNumbers = parseAllNumbersFromFile();
+    Map<String, Integer> numberCounts = getNumberCounts(allNumbers);
+    List<Integer> allCounts = new ArrayList<>();
 
-    for (String number : allNumbers) {
-      System.out.println(number);
+    for (Map.Entry<String, Integer> entry : numberCounts.entrySet()) {
+      allCounts.add(entry.getValue());
     }
+
+    Collections.sort(allCounts);
+    Collections.reverse(allCounts);
+
+    List<Integer> topFiveCounts = allCounts.subList(0, 5);
+
+    for (Map.Entry<String, Integer> entry : numberCounts.entrySet()) {
+      if (topFiveCounts.contains(entry.getValue())) {
+        System.out.println(entry.getKey() + "/" + entry.getValue());
+      }
+    }
+  }
+
+  public  static Map<String, Integer> getNumberCounts(List<String> allNumbers) {
+    Map<String, Integer> numberCounts = new HashMap<String, Integer>();
+    for (String number : allNumbers) {
+      if (numberCounts.containsKey(number)) {
+        numberCounts.put(number, numberCounts.get(number) + 1);
+      } else {
+        numberCounts.put(number, 1);
+      }
+    }
+    return numberCounts;
   }
 
   public static List<String> parseAllNumbersFromFile() {
