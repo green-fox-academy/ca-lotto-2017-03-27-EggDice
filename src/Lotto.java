@@ -13,16 +13,7 @@ public class Lotto {
   public static void main(String[] args) {
     List<String> allNumbers = parseAllNumbersFromFile();
     Map<String, Integer> numberCounts = getNumberCounts(allNumbers);
-    List<Integer> allCounts = new ArrayList<>();
-
-    for (Map.Entry<String, Integer> entry : numberCounts.entrySet()) {
-      allCounts.add(entry.getValue());
-    }
-
-    Collections.sort(allCounts);
-    Collections.reverse(allCounts);
-
-    List<Integer> topFiveCounts = allCounts.subList(0, 5);
+    List<Integer> topFiveCounts = getTopFiveCounts(numberCounts);
 
     for (Map.Entry<String, Integer> entry : numberCounts.entrySet()) {
       if (topFiveCounts.contains(entry.getValue())) {
@@ -31,7 +22,17 @@ public class Lotto {
     }
   }
 
-  public  static Map<String, Integer> getNumberCounts(List<String> allNumbers) {
+  public static List<Integer> getTopFiveCounts(Map<String, Integer> numberCounts) {
+    List<Integer> allCounts = new ArrayList<>();
+    for (Map.Entry<String, Integer> entry : numberCounts.entrySet()) {
+      allCounts.add(entry.getValue());
+    }
+    Collections.sort(allCounts);
+    Collections.reverse(allCounts);
+    return allCounts.subList(0, 5);
+  }
+
+  public static Map<String, Integer> getNumberCounts(List<String> allNumbers) {
     Map<String, Integer> numberCounts = new HashMap<String, Integer>();
     for (String number : allNumbers) {
       if (numberCounts.containsKey(number)) {
